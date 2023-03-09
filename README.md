@@ -5,3 +5,5 @@
 </p>
 
 # streamdeck-python-sdk
+
+Library for creating Stream Deck plugins in Python.
