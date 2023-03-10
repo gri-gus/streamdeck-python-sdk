@@ -1,7 +1,7 @@
 import argparse
 import json
 from pathlib import Path
-from typing import Optional, Union, Callable, List
+from typing import Optional, Callable, List
 
 import pydantic
 import websocket
@@ -32,11 +32,16 @@ class StreamDeck(
 ):
     def __init__(
             self,
-            log_file: Union[str, Path],
-            debug: bool = False,
             actions: List[Action] = None,
+            *,
+            log_file: Path = None,
+            debug: bool = False,
     ):
-        self.log_file: Path = Path(log_file)
+        if log_file is not None:
+            self.log_file: Path = Path(log_file)
+        else:
+            self.log_file = None
+
         self.debug = debug
         self.actions_list = actions
 
@@ -53,14 +58,15 @@ class StreamDeck(
 
         self.registration_dict: Optional[dict] = None
 
-        init_logger(debug=self.debug, log_file=self.log_file)
+        if self.log_file is not None:
+            init_logger(debug=self.debug, log_file=self.log_file)
 
     @log_errors
     def ws_on_open(
             self,
             ws: websocket.WebSocketApp
     ) -> None:
-        logger.info(f"on_open: WS OPENED")
+        logger.info(f"ws_on_open: WS OPENED")
         ws.send(json.dumps(self.registration_dict))
 
     @log_errors
@@ -70,8 +76,8 @@ class StreamDeck(
             close_status_code: int,
             close_msg: str
     ) -> None:
-        logger.debug(f"on_close: {close_status_code=}; {type(close_status_code)=}; {close_msg=}; {type(close_msg)=}")
-        logger.info(f"on_open: WS CLOSED")
+        logger.debug(f"ws_on_close: {close_status_code=}; {type(close_status_code)=}; {close_msg=}; {type(close_msg)=}")
+        logger.info(f"ws_on_close: WS CLOSED")
 
     @log_errors
     def ws_on_message(
@@ -80,17 +86,17 @@ class StreamDeck(
             message: str
     ) -> None:
         message_dict = json.loads(message)
-        logger.debug(f"on_message: {message_dict=}; {type(message_dict)=}")
+        logger.debug(f"ws_on_message: {message_dict=}; {type(message_dict)=}")
         event = message_dict["event"]
-        logger.debug(f"on_message: {event=}; {type(event)=}")
+        logger.debug(f"ws_on_message: {event=}; {type(event)=}")
 
         event_routing = EVENT_ROUTING_MAP.get(event)
         if event_routing is None:
-            logger.info(f"on_message: event_routing is None")
+            logger.info(f"ws_on_message: event_routing is None")
             return
 
         obj = event_routing.obj.parse_obj(message_dict)
-        logger.info(f"on_message: {obj=}; {type(obj)=}")
+        logger.info(f"ws_on_message: {obj=}; {type(obj)=}")
 
         self.route_event_in_local_handler(event_routing=event_routing, obj=obj)
 
@@ -102,7 +108,7 @@ class StreamDeck(
             ws: websocket.WebSocketApp,  # noqa
             error
     ) -> None:
-        logger.error(f"on_error: {error=}; {type(error)=}")
+        logger.error(f"ws_on_error: {error=}; {type(error)=}")
 
     def route_event_in_local_handler(
             self,
