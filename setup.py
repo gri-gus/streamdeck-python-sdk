@@ -1,16 +1,15 @@
 import setuptools
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
+PACKAGE_DIR = "src"
+REQUIREMENTS_FILE = PACKAGE_DIR + "/requirements.txt"
+README = "README.md"
 
-with open("README.md", "r") as file:
+with open(REQUIREMENTS_FILE, "r") as f:
+    requirements = f.read().splitlines()
+
+with open(README, "r") as file:
     long_description = file.read()
-
-requirements = [
-    "decohints>=1.0.7",
-    "pydantic>=1.10.5",
-    "typing_extensions>=4.5.0",
-    "websocket-client>=1.5.1",
-]
 
 setuptools.setup(
     name="streamdeck_sdk",
@@ -21,8 +20,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/gri-gus/streamdeck-python-sdk",
-    packages=setuptools.find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=setuptools.find_packages(where=PACKAGE_DIR),
+    package_dir={"": PACKAGE_DIR},
     classifiers=[
         "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: Apache Software License",
