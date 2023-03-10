@@ -1,3 +1,6 @@
+import json
+
+import pydantic
 import websocket
 from websocket import ABNF
 
@@ -11,6 +14,10 @@ class SendMixin:
 
     @log_errors
     def send(self, data, opcode=ABNF.OPCODE_TEXT):
+        if isinstance(data, pydantic.BaseModel):
+            data = data.json(ensure_ascii=False)
+        elif isinstance(data, dict):
+            data = json.dumps(data, ensure_ascii=False)
         self.ws.send(data, opcode)
 
 
