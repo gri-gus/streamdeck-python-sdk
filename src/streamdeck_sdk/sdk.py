@@ -103,7 +103,8 @@ class StreamDeck(
         if event in ACTION_EVENT_ROUTING_MAP:
             self.route_event_in_action_handler(event_routing=event_routing, obj=obj)
 
-    def ws_on_error(  # noqa
+    @log_errors
+    def ws_on_error(
             self,
             ws: websocket.WebSocketApp,  # noqa
             error
@@ -140,6 +141,7 @@ class StreamDeck(
 
     @log_errors
     def run(self) -> None:
+        logger.debug(f"Plugin has been launched")
         parser = argparse.ArgumentParser(description='StreamDeck Plugin')
         parser.add_argument('-port', dest='port', type=int, help="Port", required=True)
         parser.add_argument('-pluginUUID', dest='pluginUUID', type=str, help="pluginUUID", required=True)
@@ -147,6 +149,8 @@ class StreamDeck(
         parser.add_argument('-info', dest='info', type=str, help="info", required=True)
 
         args = parser.parse_args()
+        logger.debug(f"{args=}")
+
         self.port: int = args.port
         self.plugin_uuid: str = args.pluginUUID
         self.register_event: str = args.registerEvent

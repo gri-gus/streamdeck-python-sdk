@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -20,9 +20,9 @@ class InfoColors(BaseModel):
     buttonPressedBackgroundColor: str
     buttonPressedBorderColor: str
     buttonPressedTextColor: str
-    disabledColor: str
+    disabledColor: Optional[str]
     highlightColor: str
-    mouseDownColor: str
+    mouseDownColor: Optional[str]
 
 
 class InfoDeviceSize(BaseModel):
