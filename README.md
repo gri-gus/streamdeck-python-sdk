@@ -22,3 +22,21 @@
 # streamdeck-python-sdk
 
 Library for creating Stream Deck plugins in Python.
+
+**PyPi**: https://pypi.org/project/streamdeck-sdk/
+
+**Supported operating systems:**
+
+* MacOS 10.14 or later
+* Windows 10 or later
+
+**Supported Stream Deck application:** 6.4 or later
+
+## Installation
+
+```shell
+pip install streamdeck-sdk
+```
+
+---
+> 🧑‍💻 Documentation and examples under development
