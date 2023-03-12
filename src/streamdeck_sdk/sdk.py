@@ -47,8 +47,9 @@ class StreamDeck(
 
         self.actions = {}
 
-        self.logs_dir: Path = self.log_file.parent
-        self.logs_dir.mkdir(parents=True, exist_ok=True)
+        if self.log_file:
+            logs_dir: Path = self.log_file.parent
+            logs_dir.mkdir(parents=True, exist_ok=True)
 
         self.ws: Optional[websocket.WebSocketApp] = None
         self.port: Optional[int] = None

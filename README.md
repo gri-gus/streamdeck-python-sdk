@@ -38,5 +38,11 @@ Library for creating Stream Deck plugins in Python.
 pip install streamdeck-sdk
 ```
 
+or
+
+```shell
+pip install streamdeck_sdk
+```
+
 ---
 > 🧑‍💻 Documentation and examples under development
