@@ -1,4 +1,5 @@
 import json
+from typing import Union
 
 import pydantic
 import websocket
@@ -13,7 +14,11 @@ class SendMixin:
     ws: websocket.WebSocketApp
 
     @log_errors
-    def send(self, data, opcode=ABNF.OPCODE_TEXT):
+    def send(
+            self,
+            data: Union[pydantic.BaseModel, dict, str],
+            opcode=ABNF.OPCODE_TEXT,
+    ) -> None:
         if isinstance(data, pydantic.BaseModel):
             data = data.json(ensure_ascii=False)
         elif isinstance(data, dict):
@@ -37,7 +42,7 @@ class EventsSentMixin(SendMixin):
         ).json()
         self.send(message)
 
-    def open_url(self, url: str):
+    def open_url(self, url: str) -> None:
         message = events_sent_objs.OpenUrl(
             payload=events_sent_objs.OpenUrlPayload(
                 url=url,
@@ -45,7 +50,7 @@ class EventsSentMixin(SendMixin):
         ).json()
         self.send(message)
 
-    def log_message(self, message: str):
+    def log_message(self, message: str) -> None:
         message = events_sent_objs.LogMessage(
             payload=events_sent_objs.LogMessagePayload(
                 message=message,

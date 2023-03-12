@@ -8,29 +8,23 @@ from decohints import decohints
 logger: logging.Logger = logging.getLogger('default')
 
 
-def init_logger(debug: bool, log_file: Path) -> None:
-    if debug:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
-    # create file handler which logs even debug messages
+def init_logger(log_file: Path, log_level: int = logging.DEBUG) -> None:
+    logger.setLevel(log_level)
+    logs_dir: Path = log_file.parent
+    logs_dir.mkdir(parents=True, exist_ok=True)
     rfh = RotatingFileHandler(
         log_file,
         mode='a',
         maxBytes=3 * 1024 * 1024,
         backupCount=2,
         encoding="utf-8",
-        delay=False
+        delay=False,
     )
-    # fh = logging.FileHandler(log_file)
     rfh.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     formatter = logging.Formatter(
         "%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcName)s(%(lineno)d): %(message)s"
     )
     rfh.setFormatter(formatter)
-    # add the handlers to the logger
     logger.addHandler(rfh)
 
 

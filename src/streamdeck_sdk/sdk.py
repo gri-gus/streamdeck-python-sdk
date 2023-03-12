@@ -1,5 +1,6 @@
 import argparse
 import json
+import logging
 from pathlib import Path
 from typing import Optional, Callable, List
 
@@ -17,7 +18,7 @@ class Action(
     EventsSentMixin,
     SendMixin,
 ):
-    UUID: str
+    UUID: str  # Required
 
     def __init__(self):
         self.plugin_uuid: Optional[str] = None
@@ -35,21 +36,18 @@ class StreamDeck(
             actions: List[Action] = None,
             *,
             log_file: Path = None,
-            debug: bool = False,
+            log_level: int = logging.DEBUG,
     ):
         if log_file is not None:
             self.log_file: Path = Path(log_file)
         else:
             self.log_file = None
+        self.log_level = log_level
+        if self.log_file is not None:
+            init_logger(log_file=self.log_file, log_level=self.log_level)
 
-        self.debug = debug
         self.actions_list = actions
-
         self.actions = {}
-
-        if self.log_file:
-            logs_dir: Path = self.log_file.parent
-            logs_dir.mkdir(parents=True, exist_ok=True)
 
         self.ws: Optional[websocket.WebSocketApp] = None
         self.port: Optional[int] = None
@@ -59,48 +57,45 @@ class StreamDeck(
 
         self.registration_dict: Optional[dict] = None
 
-        if self.log_file is not None:
-            init_logger(debug=self.debug, log_file=self.log_file)
-
     @log_errors
     def ws_on_open(
             self,
-            ws: websocket.WebSocketApp
+            ws: websocket.WebSocketApp,  # noqa
     ) -> None:
-        logger.info(f"ws_on_open: WS OPENED")
-        ws.send(json.dumps(self.registration_dict))
+        logger.info("WS OPENED")
+        self.send(data=self.registration_dict)
 
     @log_errors
     def ws_on_close(
             self,
             ws: websocket.WebSocketApp,  # noqa
             close_status_code: int,
-            close_msg: str
+            close_msg: str,
     ) -> None:
-        logger.debug(f"ws_on_close: {close_status_code=}; {type(close_status_code)=}; {close_msg=}; {type(close_msg)=}")
-        logger.info(f"ws_on_close: WS CLOSED")
+        logger.debug(f"{close_status_code=}; {close_msg=}")
+        logger.info(f"WS CLOSED")
 
     @log_errors
     def ws_on_message(
             self,
             ws: websocket.WebSocketApp,  # noqa
-            message: str
+            message: str,
     ) -> None:
         message_dict = json.loads(message)
-        logger.debug(f"ws_on_message: {message_dict=}; {type(message_dict)=}")
+        logger.debug(f"{message_dict=}")
+
         event = message_dict["event"]
-        logger.debug(f"ws_on_message: {event=}; {type(event)=}")
+        logger.debug(f"{event=}")
 
         event_routing = EVENT_ROUTING_MAP.get(event)
         if event_routing is None:
-            logger.info(f"ws_on_message: event_routing is None")
+            logger.warning("event_routing is None")
             return
 
         obj = event_routing.obj.parse_obj(message_dict)
-        logger.info(f"ws_on_message: {obj=}; {type(obj)=}")
+        logger.debug(f"{obj=}")
 
-        self.route_event_in_local_handler(event_routing=event_routing, obj=obj)
-
+        self.route_event_in_sd_handler(event_routing=event_routing, obj=obj)
         if event in ACTION_EVENT_ROUTING_MAP:
             self.route_event_in_action_handler(event_routing=event_routing, obj=obj)
 
@@ -108,20 +103,24 @@ class StreamDeck(
     def ws_on_error(
             self,
             ws: websocket.WebSocketApp,  # noqa
-            error
+            error: str,
     ) -> None:
-        logger.error(f"ws_on_error: {error=}; {type(error)=}")
+        logger.error(f"{error=}")
 
-    def route_event_in_local_handler(
+    @log_errors
+    def route_event_in_sd_handler(
             self,
             event_routing: EventRoutingObj,
             obj: pydantic.BaseModel
     ) -> None:
         handler: Callable = getattr(self, event_routing.handler_name)
         if handler is None:
-            raise ValueError("Handler is None")
+            message = "Handler is None"
+            logger.error(message)
+            raise ValueError(message)
         handler(obj=obj)
 
+    @log_errors
     def route_event_in_action_handler(
             self,
             event_routing: EventRoutingObj,
@@ -129,15 +128,19 @@ class StreamDeck(
     ) -> None:
         try:
             action_uuid = getattr(obj, "action")
-        except AttributeError:
+        except AttributeError as err:
+            logger.warning(str(err), exc_info=True)
             return
         action_obj = self.actions.get(action_uuid)
         if action_obj is None:
+            logger.info(f"{action_uuid=} not registered")
             return
 
         handler: Callable = getattr(action_obj, event_routing.handler_name)
         if handler is None:
-            raise ValueError("Handler is None")
+            message = "Handler is None"
+            logger.error(message)
+            raise ValueError(message)
         handler(obj=obj)
 
     @log_errors
@@ -153,13 +156,16 @@ class StreamDeck(
         logger.debug(f"{args=}")
 
         self.port: int = args.port
+        logger.debug(f"{self.port=}")
         self.plugin_uuid: str = args.pluginUUID
+        logger.debug(f"{self.plugin_uuid=}")
         self.register_event: str = args.registerEvent
-        logger.debug(f"{args.info=}")
+        logger.debug(f"{self.register_event=}")
         self.info: registration_objs.Info = registration_objs.Info.parse_obj(json.loads(args.info))
         logger.debug(f"{self.info=}")
 
         self.registration_dict = {"event": self.register_event, "uuid": self.plugin_uuid}
+        logger.debug(f"{self.registration_dict=}")
         self.ws = websocket.WebSocketApp(
             'ws://localhost:' + str(self.port),
             on_message=self.ws_on_message,
@@ -179,7 +185,9 @@ class StreamDeck(
                 action_uuid = action.UUID
             except AttributeError:
                 action_class = str(action.__class__)
-                raise AttributeError(f"{action_class} must have attribute UUID")
+                message = f"{action_class} must have attribute UUID"
+                logger.error(message)
+                raise AttributeError(message)
             action.ws = self.ws
             action.plugin_uuid = self.plugin_uuid
             self.actions[action_uuid] = action

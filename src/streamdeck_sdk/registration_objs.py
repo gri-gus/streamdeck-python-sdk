@@ -3,6 +3,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
+# region NestedModels
 class InfoApplication(BaseModel):
     font: str
     language: str
@@ -37,9 +38,14 @@ class InfoDevice(BaseModel):
     type: int
 
 
+# endregion NestedModels
+
+# region Models
 class Info(BaseModel):
     application: InfoApplication
     plugin: InfoPlugin
     devicePixelRatio: int
     colors: InfoColors
     devices: List[InfoDevice]
+
+# endregion Models
