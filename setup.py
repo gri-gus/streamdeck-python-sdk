@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION = "0.1.13"
+VERSION = "0.1.14"
 PACKAGE_DIR = "src"
 REQUIREMENTS_FILE = PACKAGE_DIR + "/requirements.txt"
 README = "README.md"
