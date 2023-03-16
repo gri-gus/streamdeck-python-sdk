@@ -66,7 +66,8 @@ ACTION_EVENT_ROUTING_MAP: Dict[str, EventRoutingObj] = {
         handler_name="on_send_to_property_inspector",
     ),
 }
-API_EVENT_ROUTING_MAP: Dict[str, EventRoutingObj] = {
+
+PLUGIN_EVENT_ROUTING_MAP: Dict[str, EventRoutingObj] = {
     "didReceiveGlobalSettings": EventRoutingObj(
         obj=events_received_objs.DidReceiveGlobalSettings,
         handler_name="on_did_receive_global_settings",
@@ -95,5 +96,5 @@ API_EVENT_ROUTING_MAP: Dict[str, EventRoutingObj] = {
 
 EVENT_ROUTING_MAP: Dict[str, EventRoutingObj] = {
     **ACTION_EVENT_ROUTING_MAP,
-    **API_EVENT_ROUTING_MAP,
+    **PLUGIN_EVENT_ROUTING_MAP,
 }

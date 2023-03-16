@@ -8,29 +8,42 @@ import pydantic
 import websocket
 
 from . import registration_objs
-from .event_routings import EventRoutingObj, ACTION_EVENT_ROUTING_MAP, EVENT_ROUTING_MAP
+from .event_routings import (
+    EventRoutingObj,
+    ACTION_EVENT_ROUTING_MAP,
+    EVENT_ROUTING_MAP,
+    PLUGIN_EVENT_ROUTING_MAP,
+)
 from .logger import logger, init_logger, log_errors
-from .mixins import SendMixin, APIEventHandlersMixin, ActionEventHandlersMixin, EventsSentMixin
-
-
-class Action(
+from .mixins import (
+    PluginEventHandlersMixin,
     ActionEventHandlersMixin,
-    EventsSentMixin,
+    PluginEventsSentMixin,
+    ActionEventsSentMixin,
+    SendMixin,
+)
+
+
+class Base(
+    PluginEventHandlersMixin,
+    ActionEventHandlersMixin,
+    PluginEventsSentMixin,
+    ActionEventsSentMixin,
     SendMixin,
 ):
+    pass
+
+
+class Action(Base):
     UUID: str  # Required
 
     def __init__(self):
         self.plugin_uuid: Optional[str] = None
         self.ws: Optional[websocket.WebSocketApp] = None
+        self.info: Optional[registration_objs.Info] = None
 
 
-class StreamDeck(
-    ActionEventHandlersMixin,
-    APIEventHandlersMixin,
-    EventsSentMixin,
-    SendMixin,
-):
+class StreamDeck(Base):
     def __init__(
             self,
             actions: List[Action] = None,
@@ -95,9 +108,11 @@ class StreamDeck(
         obj = event_routing.obj.parse_obj(message_dict)
         logger.debug(f"{obj=}")
 
-        self.route_event_in_sd_handler(event_routing=event_routing, obj=obj)
+        self.route_plugin_event_in_plugin_handler(event_routing=event_routing, obj=obj)
         if event in ACTION_EVENT_ROUTING_MAP:
-            self.route_event_in_action_handler(event_routing=event_routing, obj=obj)
+            self.route_action_event_in_action_handler(event_routing=event_routing, obj=obj)
+        elif event in PLUGIN_EVENT_ROUTING_MAP:
+            self.route_plugin_event_in_actions_handler(event_routing=event_routing, obj=obj)
 
     @log_errors
     def ws_on_error(
@@ -108,20 +123,20 @@ class StreamDeck(
         logger.error(f"{error=}")
 
     @log_errors
-    def route_event_in_sd_handler(
+    def route_plugin_event_in_plugin_handler(
             self,
             event_routing: EventRoutingObj,
-            obj: pydantic.BaseModel
+            obj: pydantic.BaseModel,
     ) -> None:
-        handler: Callable = getattr(self, event_routing.handler_name)
-        if handler is None:
-            message = "Handler is None"
-            logger.error(message)
-            raise ValueError(message)
+        try:
+            handler: Callable = getattr(self, event_routing.handler_name)
+        except AttributeError as err:
+            logger.error(f"Handler missing: {str(err)}", exc_info=True)
+            return
         handler(obj=obj)
 
     @log_errors
-    def route_event_in_action_handler(
+    def route_action_event_in_action_handler(
             self,
             event_routing: EventRoutingObj,
             obj: pydantic.BaseModel,
@@ -129,19 +144,34 @@ class StreamDeck(
         try:
             action_uuid = getattr(obj, "action")
         except AttributeError as err:
-            logger.warning(str(err), exc_info=True)
+            logger.error(str(err), exc_info=True)
             return
+
         action_obj = self.actions.get(action_uuid)
         if action_obj is None:
             logger.info(f"{action_uuid=} not registered")
             return
 
-        handler: Callable = getattr(action_obj, event_routing.handler_name)
-        if handler is None:
-            message = "Handler is None"
-            logger.error(message)
-            raise ValueError(message)
+        try:
+            handler: Callable = getattr(action_obj, event_routing.handler_name)
+        except AttributeError as err:
+            logger.error(f"Handler missing: {str(err)}", exc_info=True)
+            return
         handler(obj=obj)
+
+    @log_errors
+    def route_plugin_event_in_actions_handler(
+            self,
+            event_routing: EventRoutingObj,
+            obj: pydantic.BaseModel,
+    ) -> None:
+        for action_obj in self.actions.values():
+            try:
+                handler: Callable = getattr(action_obj, event_routing.handler_name)
+            except AttributeError as err:
+                logger.error(f"Handler missing: {str(err)}", exc_info=True)
+                return
+            handler(obj=obj)
 
     @log_errors
     def run(self) -> None:
@@ -190,4 +220,5 @@ class StreamDeck(
                 raise AttributeError(message)
             action.ws = self.ws
             action.plugin_uuid = self.plugin_uuid
+            action.info = self.info
             self.actions[action_uuid] = action

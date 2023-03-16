@@ -32,7 +32,7 @@ Library for creating Stream Deck plugins in Python.
 
 **Supported Stream Deck application:** 6.4 or later
 
-**Supported Python:** 3.8 or later
+**Supported Python:** 3.7 or later
 
 ## Installation
 
