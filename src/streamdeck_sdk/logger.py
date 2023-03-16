@@ -30,6 +30,10 @@ def init_logger(log_file: Path, log_level: int = logging.DEBUG) -> None:
 
 @decohints
 def log_errors(func):
+    """
+    A decorator that logs and suppresses errors in the function being decorated.
+    """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:

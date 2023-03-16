@@ -50,6 +50,7 @@ class WillDisappearPayload(BaseModel):
 class DidReceiveSettingsPayload(BaseModel):
     settings: dict
     coordinates: KeyCoordinates
+    state: Optional[int]
     isInMultiAction: bool
 
 
