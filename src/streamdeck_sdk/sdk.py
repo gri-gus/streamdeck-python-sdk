@@ -50,14 +50,17 @@ class StreamDeck(Base):
             *,
             log_file: Path = None,
             log_level: int = logging.DEBUG,
+            log_max_bytes: int = 3 * 1024 * 1024,
+            log_backup_count: int = 2,
     ):
         if log_file is not None:
             self.log_file: Path = Path(log_file)
-        else:
-            self.log_file = None
-        self.log_level = log_level
-        if self.log_file is not None:
-            init_logger(log_file=self.log_file, log_level=self.log_level)
+            init_logger(
+                log_file=self.log_file,
+                log_level=log_level,
+                log_max_bytes=log_max_bytes,
+                log_backup_count=log_backup_count,
+            )
 
         self.actions_list = actions
         self.actions = {}
