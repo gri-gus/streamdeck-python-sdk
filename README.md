@@ -1,6 +1,6 @@
 <p align="center">
     <a>
-        <img src="https://raw.githubusercontent.com/gri-gus/streamdeck-python-sdk/main/assets/images/cover.png" alt="decohints">
+        <img src="https://raw.githubusercontent.com/gri-gus/streamdeck-python-sdk/main/assets/images/cover.png" alt="streamdeck-python-sdk">
     </a>
 </p>
 
@@ -46,5 +46,10 @@ or
 pip install streamdeck_sdk
 ```
 
+## Examples
+
+[LoremFlickr](https://github.com/gri-gus/loremflickr-streamdeck-plugin) - Plugin for installing images from LoremFlickr
+to button. Supports MacOS and Windows.
+
 ---
-> 🧑‍💻 Documentation and examples under development
+> 🧑‍💻 Documentation under development
