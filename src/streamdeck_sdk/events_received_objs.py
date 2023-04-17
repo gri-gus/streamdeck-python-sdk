@@ -115,6 +115,18 @@ class TouchTapPayload(BaseModel):
     hold: bool
 
 
+class DialDownPayload(BaseModel):
+    controller: str
+    settings: str
+    coordinates: KeyCoordinates
+
+
+class DialUpPayload(BaseModel):
+    controller: str
+    settings: str
+    coordinates: KeyCoordinates
+
+
 # endregion NestedModels
 
 # region Models
@@ -153,6 +165,22 @@ class TouchTap(BaseModel):
     device: str
     payload: TouchTapPayload
     event: str = "touchTap"
+
+
+class DialDown(BaseModel):
+    action: str
+    context: str
+    device: str
+    payload: DialDownPayload
+    event: str = "dialDown"
+
+
+class DialUp(BaseModel):
+    action: str
+    context: str
+    device: str
+    payload: DialUpPayload
+    event: str = "dialUp"
 
 
 class DialPress(BaseModel):

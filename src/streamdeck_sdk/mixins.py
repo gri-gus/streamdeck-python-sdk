@@ -198,6 +198,12 @@ class ActionEventHandlersMixin:
     def on_touch_tap(self, obj: events_received_objs.TouchTap) -> None:
         pass
 
+    def on_dial_down(self, obj: events_received_objs.DialDown) -> None:
+        pass
+
+    def on_dial_up(self, obj: events_received_objs.DialUp) -> None:
+        pass
+
     def on_dial_press(self, obj: events_received_objs.DialPress) -> None:
         pass
 

@@ -29,6 +29,14 @@ ACTION_EVENT_ROUTING_MAP: Dict[str, EventRoutingObj] = {
         obj=events_received_objs.TouchTap,
         handler_name="on_touch_tap",
     ),
+    "dialDown": EventRoutingObj(
+        obj=events_received_objs.DialDown,
+        handler_name="on_dial_down",
+    ),
+    "dialUp": EventRoutingObj(
+        obj=events_received_objs.DialUp,
+        handler_name="on_dial_up",
+    ),
     "dialPress": EventRoutingObj(
         obj=events_received_objs.DialPress,
         handler_name="on_dial_press",

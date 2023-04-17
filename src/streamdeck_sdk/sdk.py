@@ -50,7 +50,7 @@ class StreamDeck(Base):
             *,
             log_file: Path = None,
             log_level: int = logging.DEBUG,
-            log_max_bytes: int = 3 * 1024 * 1024,
+            log_max_bytes: int = 3 * 1024 * 1024,  # 3 MB
             log_backup_count: int = 2,
     ):
         if log_file is not None:
@@ -219,7 +219,7 @@ class StreamDeck(Base):
             except AttributeError:
                 action_class = str(action.__class__)
                 message = f"{action_class} must have attribute UUID"
-                logger.error(message)
+                logger.error(message, exc_info=True)
                 raise AttributeError(message)
             action.ws = self.ws
             action.plugin_uuid = self.plugin_uuid
