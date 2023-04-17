@@ -5,16 +5,18 @@ from pathlib import Path
 
 from decohints import decohints
 
-logger: logging.Logger = logging.getLogger('default')
+_root_logger: logging.Logger = logging.getLogger()
+_log_errors_decorator_logger = logging.getLogger("log_errors_decorator")
+logger = logging.getLogger("streamdeck_plugin")
 
 
-def init_logger(
+def init_root_logger(
         log_file: Path,
         log_level: int = logging.DEBUG,
         log_max_bytes: int = 3 * 1024 * 1024,
         log_backup_count: int = 2,
 ) -> None:
-    logger.setLevel(log_level)
+    _root_logger.setLevel(log_level)
     logs_dir: Path = log_file.parent
     logs_dir.mkdir(parents=True, exist_ok=True)
     rfh = RotatingFileHandler(
@@ -30,7 +32,7 @@ def init_logger(
         "%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcName)s(%(lineno)d): %(message)s"
     )
     rfh.setFormatter(formatter)
-    logger.addHandler(rfh)
+    _root_logger.addHandler(rfh)
 
 
 @decohints
@@ -44,8 +46,12 @@ def log_errors(func):
         try:
             result = func(*args, **kwargs)
         except BaseException as err:
-            logger.error(str(err), exc_info=True)
+            _log_errors_decorator_logger.error(str(err), exc_info=True)
             return
         return result
 
     return wrapper
+
+
+def rename_plugin_logger(name: str):
+    logger.name = name

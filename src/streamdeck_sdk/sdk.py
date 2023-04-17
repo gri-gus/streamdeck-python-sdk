@@ -2,36 +2,32 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Optional, Callable, List
+from typing import Optional, Callable, List, Dict
 
 import pydantic
 import websocket
 
-from . import registration_objs
-from .event_routings import (
-    EventRoutingObj,
-    ACTION_EVENT_ROUTING_MAP,
-    EVENT_ROUTING_MAP,
-    PLUGIN_EVENT_ROUTING_MAP,
+from . import event_routings
+from . import mixins
+from .logger import (
+    init_root_logger,
+    log_errors,
+    rename_plugin_logger,
 )
-from .logger import logger, init_logger, log_errors
-from .mixins import (
-    PluginEventHandlersMixin,
-    ActionEventHandlersMixin,
-    PluginEventsSentMixin,
-    ActionEventsSentMixin,
-    SendMixin,
-)
+from .sd_objs import registration_objs
 
 
 class Base(
-    PluginEventHandlersMixin,
-    ActionEventHandlersMixin,
-    PluginEventsSentMixin,
-    ActionEventsSentMixin,
-    SendMixin,
+    mixins.PluginEventHandlersMixin,
+    mixins.ActionEventHandlersMixin,
+    mixins.PluginEventsSendMixin,
+    mixins.ActionEventsSendMixin,
+    mixins.SendMixin,
 ):
     pass
+
+
+logger = logging.getLogger(__name__)
 
 
 class Action(Base):
@@ -46,16 +42,16 @@ class Action(Base):
 class StreamDeck(Base):
     def __init__(
             self,
-            actions: List[Action] = None,
+            actions: Optional[List[Action]] = None,
             *,
-            log_file: Path = None,
+            log_file: Optional[Path] = None,
             log_level: int = logging.DEBUG,
             log_max_bytes: int = 3 * 1024 * 1024,  # 3 MB
             log_backup_count: int = 2,
     ):
         if log_file is not None:
             self.log_file: Path = Path(log_file)
-            init_logger(
+            init_root_logger(
                 log_file=self.log_file,
                 log_level=log_level,
                 log_max_bytes=log_max_bytes,
@@ -63,13 +59,13 @@ class StreamDeck(Base):
             )
 
         self.actions_list = actions
-        self.actions = {}
+        self.actions: Dict[str, Action] = {}
 
         self.ws: Optional[websocket.WebSocketApp] = None
         self.port: Optional[int] = None
         self.plugin_uuid: Optional[str] = None
         self.register_event: Optional[str] = None
-        self.info: [registration_objs.Info] = None
+        self.info: Optional[registration_objs.Info] = None
 
         self.registration_dict: Optional[dict] = None
 
@@ -103,19 +99,19 @@ class StreamDeck(Base):
         event = message_dict["event"]
         logger.debug(f"{event=}")
 
-        event_routing = EVENT_ROUTING_MAP.get(event)
+        event_routing = event_routings.EVENT_ROUTING_MAP.get(event)
         if event_routing is None:
             logger.warning("event_routing is None")
             return
 
-        obj = event_routing.obj.parse_obj(message_dict)
+        obj = event_routing.obj_type.parse_obj(message_dict)
         logger.debug(f"{obj=}")
 
-        self.route_plugin_event_in_plugin_handler(event_routing=event_routing, obj=obj)
-        if event in ACTION_EVENT_ROUTING_MAP:
+        self.route_event_in_plugin_handler(event_routing=event_routing, obj=obj)
+        if event_routing.type is event_routings.EventRoutingObjTypes.ACTION:
             self.route_action_event_in_action_handler(event_routing=event_routing, obj=obj)
-        elif event in PLUGIN_EVENT_ROUTING_MAP:
-            self.route_plugin_event_in_actions_handler(event_routing=event_routing, obj=obj)
+        elif event_routing.type is event_routings.EventRoutingObjTypes.PLUGIN:
+            self.route_plugin_event_in_action_handlers(event_routing=event_routing, obj=obj)
 
     @log_errors
     def ws_on_error(
@@ -126,9 +122,9 @@ class StreamDeck(Base):
         logger.error(f"{error=}")
 
     @log_errors
-    def route_plugin_event_in_plugin_handler(
+    def route_event_in_plugin_handler(
             self,
-            event_routing: EventRoutingObj,
+            event_routing: event_routings.EventRoutingObj,
             obj: pydantic.BaseModel,
     ) -> None:
         try:
@@ -141,7 +137,7 @@ class StreamDeck(Base):
     @log_errors
     def route_action_event_in_action_handler(
             self,
-            event_routing: EventRoutingObj,
+            event_routing: event_routings.EventRoutingObj,
             obj: pydantic.BaseModel,
     ) -> None:
         try:
@@ -152,7 +148,7 @@ class StreamDeck(Base):
 
         action_obj = self.actions.get(action_uuid)
         if action_obj is None:
-            logger.info(f"{action_uuid=} not registered")
+            logger.warning(f"{action_uuid=} not registered")
             return
 
         try:
@@ -163,9 +159,9 @@ class StreamDeck(Base):
         handler(obj=obj)
 
     @log_errors
-    def route_plugin_event_in_actions_handler(
+    def route_plugin_event_in_action_handlers(
             self,
-            event_routing: EventRoutingObj,
+            event_routing: event_routings.EventRoutingObj,
             obj: pydantic.BaseModel,
     ) -> None:
         for action_obj in self.actions.values():
@@ -196,6 +192,8 @@ class StreamDeck(Base):
         logger.debug(f"{self.register_event=}")
         self.info: registration_objs.Info = registration_objs.Info.parse_obj(json.loads(args.info))
         logger.debug(f"{self.info=}")
+
+        rename_plugin_logger(name=self.info.plugin.uuid)
 
         self.registration_dict = {"event": self.register_event, "uuid": self.plugin_uuid}
         logger.debug(f"{self.registration_dict=}")

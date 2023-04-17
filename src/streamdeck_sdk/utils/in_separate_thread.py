@@ -1,6 +1,6 @@
+from functools import wraps
 from threading import Thread
 from typing import Callable, Optional
-from functools import wraps
 
 
 class ThreadingFunc:
@@ -13,16 +13,18 @@ class ThreadingFunc:
         self.func = func
         self.daemon = daemon
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> Thread:
         thread = Thread(target=self.func, args=args, kwargs=kwargs, daemon=self.daemon)
         thread.start()
+        return thread
 
 
 def in_separate_thread(daemon: Optional[bool] = None):
     """
     Decorator for executing the decorated function on a separate thread.
 
-    :param daemon: a daemon thread (True) or not (False). Its initial value is inherited from the creating thread.
+    :param daemon: A daemon thread (True) or not (False). If None, then its initial value is inherited
+        from the creating thread.
     """
 
     def _decorator(func: Callable):

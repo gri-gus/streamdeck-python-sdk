@@ -46,6 +46,15 @@ or
 pip install streamdeck_sdk
 ```
 
+## Features
+
+* Easy use. You can quickly create your own plugin without having to understand how websockets and other complicated
+  things work.
+* Fully typed, using [pydantic](https://github.com/pydantic/pydantic).
+* Includes image to base64 converters for easy installation of icons on keys.
+* Includes a decorator for functions and methods to run on a separate thread.
+* Exception logging and easy logging configuration.
+
 ## Examples
 
 [LoremFlickr](https://github.com/gri-gus/loremflickr-streamdeck-plugin) - Plugin for installing images from LoremFlickr

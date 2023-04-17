@@ -1,4 +1,4 @@
-decohints>=1.0.7
-pydantic>=1.10.5
+decohints>=1.0.9
+pydantic>=1.10.7
 typing_extensions>=4.5.0
 websocket-client>=1.5.1
