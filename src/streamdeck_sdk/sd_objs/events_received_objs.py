@@ -117,13 +117,13 @@ class TouchTapPayload(BaseModel):
 
 class DialDownPayload(BaseModel):
     controller: str
-    settings: str
+    settings: dict
     coordinates: KeyCoordinates
 
 
 class DialUpPayload(BaseModel):
     controller: str
-    settings: str
+    settings: dict
     coordinates: KeyCoordinates
 
 
