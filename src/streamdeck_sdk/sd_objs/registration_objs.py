@@ -21,9 +21,9 @@ class InfoColors(BaseModel):
     buttonPressedBackgroundColor: str
     buttonPressedBorderColor: str
     buttonPressedTextColor: str
-    disabledColor: Optional[str]
+    disabledColor: Optional[str] = None
     highlightColor: str
-    mouseDownColor: Optional[str]
+    mouseDownColor: Optional[str] = None
 
 
 class InfoDeviceSize(BaseModel):
