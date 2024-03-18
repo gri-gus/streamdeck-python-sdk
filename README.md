@@ -105,11 +105,11 @@ Next in the
 method [self.send](https://github.com/gri-gus/streamdeck-python-sdk/blob/27652ed919cb85b94e91258487a2d2aba6087466/src/streamdeck_sdk/mixins.py#L16)
 the pydantic object is converted to json and sent to Property Inspector.
 
-### What is `payload`?
+**What is `payload`?**
 
 It's any `dict` you want. But there is a condition, it must be convertible to json.
 
-### How Property inspector does receive payload data?
+**How Property inspector does receive payload data?**
 
 To answer this question, you need to look at the source
 code [streamdeck-javascript-sdk](https://github.com/elgatosf/streamdeck-javascript-sdk). As I understand, in their sdk
