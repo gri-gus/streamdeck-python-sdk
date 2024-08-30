@@ -38,7 +38,7 @@ Library for creating Stream Deck plugins in Python.
 
 ## Features
 
-* Ease of use. You can quickly create your own plugin without having to understand how web sockets and
+* Ease of use. You can quickly create your own plugin without having to understand how websockets and
   other technologies work.
 * Fully typed, using [pydantic](https://github.com/pydantic/pydantic).
 * Includes image to base64 converters for easy installation of icons on keys.

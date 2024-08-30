@@ -20,7 +20,7 @@ DISTRIBUTION_TOOL_WINDOWS = ASSETS_DIR / "DistributionTool.exe"
 def main():
     parser = argparse.ArgumentParser(description='StreamDeckSDK')
     parser.add_argument('command')
-    parser.add_argument('-i', default=None, required=False, type=str)
+    parser.add_argument('-i', default=None, required=False, type=str, help="Input file", )
     args = parser.parse_args()
     logger.info(args)
     command = args.command
@@ -36,6 +36,9 @@ def main():
         release_dir = BASE_DIR / f"releases/{dt}"
         release_dir.mkdir(exist_ok=True, parents=True)
         release_dir = str(release_dir.resolve())
+
+        [p.unlink() for p in BASE_DIR.rglob('*.py[co]')]
+        [p.rmdir() for p in BASE_DIR.rglob('__pycache__')]
 
         os_name = platform.system()
         logger.info(os_name)

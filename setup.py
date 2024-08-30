@@ -1,15 +1,21 @@
+from pathlib import Path
+
 import setuptools
 
-VERSION = "1.0.0dev4"
+VERSION = "1.0.0"
 PACKAGE_DIR = "."
 REQUIREMENTS_FILE = "./requirements.txt"
 README = "README-PYPI.md"
+BASE_DIR = Path(__file__).resolve().parent
 
 with open(REQUIREMENTS_FILE, "r") as f:
     requirements = f.read().splitlines()
 
 with open(README, "r") as file:
     long_description = file.read()
+
+[p.unlink() for p in BASE_DIR.rglob('*.py[co]')]
+[p.rmdir() for p in BASE_DIR.rglob('__pycache__')]
 
 setuptools.setup(
     name="streamdeck_sdk",
