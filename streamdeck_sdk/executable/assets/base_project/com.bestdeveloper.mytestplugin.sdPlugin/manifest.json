@@ -1,0 +1,44 @@
+{
+  "Actions": [
+    {
+      "UUID": "com.bestdeveloper.mytestplugin.myaction",
+      "Icon": "assets/myaction/action_icon",
+      "Name": "My action",
+      "States": [
+        {
+          "Image": "assets/myaction/key_icon"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Tooltip": "Open streamdeck_sdk github page.",
+      "UserTitleEnabled": true
+    }
+  ],
+  "Author": "BestDeveloper",
+  "CodePath": "run.sh",
+  "Description": "Open streamdeck_sdk github page.",
+  "Icon": "assets/plugin_icon",
+  "Name": "MyTestPlugin",
+  "Version": "0.0.1",
+  "SDKVersion": 2,
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.14"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "6"
+  },
+  "Category": "MyTestCategory",
+  "CategoryIcon": "assets/category_icon",
+  "CodePathMac": "run.sh",
+  "CodePathWin": "run.bat"
+}

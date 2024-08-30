@@ -1,9 +1,9 @@
 import setuptools
 
-VERSION = "0.3.2"
-PACKAGE_DIR = "src"
-REQUIREMENTS_FILE = PACKAGE_DIR + "/requirements.txt"
-README = "README.md"
+VERSION = "1.0.0dev4"
+PACKAGE_DIR = "."
+REQUIREMENTS_FILE = "./requirements.txt"
+README = "README-PYPI.md"
 
 with open(REQUIREMENTS_FILE, "r") as f:
     requirements = f.read().splitlines()
@@ -21,13 +21,13 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/gri-gus/streamdeck-python-sdk",
     packages=setuptools.find_packages(where=PACKAGE_DIR),
-    package_dir={"": PACKAGE_DIR},
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     license="Apache Software License",
     keywords=[
         "python",
@@ -45,4 +45,9 @@ setuptools.setup(
         "streamdeck python sdk"
     ],
     install_requires=requirements,
+    entry_points={
+        'console_scripts': [
+            'streamdeck_sdk=streamdeck_sdk.executable.executable:main',
+        ],
+    },
 )
