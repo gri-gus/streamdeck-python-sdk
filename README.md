@@ -84,8 +84,7 @@ pip install streamdeck-sdk
 streamdeck_sdk startproject
 ```
 
-After completing this step, the folder `com.bestdeveloper.mytestplugin.sdPlugin` will appear with a test project and
-files for build.
+After completing this step, the folder `com.bestdeveloper.mytestplugin.sdPlugin` will appear with a test project.
 
 5. Build the plugin using the command:
 
@@ -101,7 +100,7 @@ streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin
 7. Go to the Stream Deck application in the `MyTestCategory` category and set the `My action` action to any button.
 8. Check the operation of the `My action` action.
    When clicked, the following happens:
-    1. The github page opens.
+    1. The GitHub page opens.
     2. ✅ appears on the button.
 
 Next, edit the project in accordance with the official documentation [Stream Deck SDK](https://docs.elgato.com/sdk).
