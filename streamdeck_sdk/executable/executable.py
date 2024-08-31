@@ -18,9 +18,9 @@ DISTRIBUTION_TOOL_WINDOWS = ASSETS_DIR / "DistributionTool.exe"
 
 
 def main():
-    parser = argparse.ArgumentParser(description='StreamDeckSDK')
-    parser.add_argument('command')
-    parser.add_argument('-i', default=None, required=False, type=str, help="Input file", )
+    parser = argparse.ArgumentParser(description="StreamDeckSDK")
+    parser.add_argument("command")
+    parser.add_argument("-i", default=None, required=False, type=str, help="Input file", )
     args = parser.parse_args()
     logger.info(args)
     command = args.command

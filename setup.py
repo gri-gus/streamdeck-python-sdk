@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 PACKAGE_DIR = "."
 REQUIREMENTS_FILE = "./requirements.txt"
 README = "README-PYPI.md"
