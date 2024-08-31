@@ -35,7 +35,7 @@ class WebSocketClientApp:
         while True:
             try:
                 message = self.client.recv()
-                logger.debug(f"Сообщение {message} получено.")
+                logger.debug(f"Message received. {message=}")
             except ConnectionClosedOK as err:
                 self._handle_connection_close(err=err)
                 break

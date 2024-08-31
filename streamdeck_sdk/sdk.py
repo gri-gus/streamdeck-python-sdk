@@ -1,16 +1,16 @@
 import argparse
 import json
 import logging
+import sys
 from os import PathLike
 from pathlib import Path
 from typing import Optional, List, Dict, Set
 
 from websockets.sync.server import (
     ServerConnection,
-    WebSocketServer,  # noqa
-    serve,
 )
 
+from .debug_server_mixin import DebugServerMixin
 from .event_routing_mixin import EventRoutingMixin
 from .logger import (
     init_root_logger,
@@ -20,7 +20,6 @@ from .logger import (
 from .mixins import Base
 from .sd_objs import registration_objs
 from .simple_ws.client import WebSocketClientApp
-from .utils.in_separate_thread import in_separate_thread
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +33,11 @@ class Action(Base):
         self.info: Optional[registration_objs.Info] = None
 
 
-class StreamDeck(Base, EventRoutingMixin):
+class StreamDeck(
+    Base,
+    EventRoutingMixin,
+    DebugServerMixin,
+):
     def __init__(
             self,
             actions: Optional[List[Action]] = None,
@@ -95,26 +98,28 @@ class StreamDeck(Base, EventRoutingMixin):
     def run_debug(self):
         logger.warning("Debug mode.")
 
-        try:
-            logger.info("Trying to connect to the debug server.")
-            self.ws = WebSocketClientApp(
-                uri=f'ws://localhost:{self.debug_port}/',
-                on_message=self.ws_on_message,
-            )
-            logger.info(f"Successfully connected to the debug server.")
-            self.__init_actions()
-            self.ws.run_forever()
+        if len(sys.argv) == 1:  # is client
+            try:
+                logger.info("Trying to connect to the debug server.")
+                self.ws = WebSocketClientApp(
+                    uri=f'ws://localhost:{self.debug_port}/',
+                    on_message=self.ws_on_message,
+                )
+                logger.info(f"Successfully connected to the debug server.")
+                self.__init_actions()
+                self.ws.run_forever()
+            except Exception as err:
+                logger.exception(err)
+                logger.debug(f"Failed to connect to debug server.")
             return
-        except Exception:
-            logger.debug(f"Failed to connect to debug server.")
 
         logger.info("Trying to create a debug server.")
         self.__parse_args()
-        self.__debug_server_run()
+        self._debug_server_run()
         logger.debug("Debug server is running.")
         self.ws = WebSocketClientApp(
             uri=f'ws://localhost:{self.port}/',
-            on_message=self.__debug_server_on_message,
+            on_message=self._debug_server_on_message,
             on_open=self.ws_on_open,
         )
         logger.debug("Debug server connected to StreamDeck.")
@@ -139,12 +144,14 @@ class StreamDeck(Base, EventRoutingMixin):
             self.actions[action_uuid] = action
 
     def __parse_args(self):
+        logger.debug("Trying to parse arguments.")
         parser = argparse.ArgumentParser(description='StreamDeck Plugin')
         parser.add_argument('-port', dest='port', type=int, help="Port", required=True)
         parser.add_argument('-pluginUUID', dest='pluginUUID', type=str, help="pluginUUID", required=True)
         parser.add_argument('-registerEvent', dest='registerEvent', type=str, help="registerEvent", required=True)
         parser.add_argument('-info', dest='info', type=str, help="info", required=True)
         args = parser.parse_args()
+        logger.debug("Trying to parse arguments was successful.")
         logger.debug(f"{args=}")
 
         self.port = args.port
@@ -157,30 +164,3 @@ class StreamDeck(Base, EventRoutingMixin):
 
         self.registration_dict = {"event": self.register_event, "uuid": self.plugin_uuid}
         logger.debug(f"{self.registration_dict=}")
-
-    @in_separate_thread(daemon=True)
-    def __debug_server_run(self):
-        server: WebSocketServer = serve(handler=self.__debug_server_handler, host="localhost", port=self.debug_port)
-        server.serve_forever()
-
-    def __debug_server_handler(self, websocket: ServerConnection):
-        self.debug_clients.add(websocket)
-        logger.debug(f"Client {websocket} added, clients: {self.debug_clients}.")
-        try:
-            for message in websocket:
-                logger.debug(f"Message {message} received from StreamDeckPlugin.")
-                self.ws.send(message)
-                logger.debug(f"Message {message} sent to StreamDeck.")
-        except Exception:  # noqa
-            self.debug_clients.remove(websocket)
-            logger.debug(f"Client {websocket} removed, clients: {self.debug_clients}")
-
-    def __debug_server_on_message(
-            self,
-            ws: WebSocketClientApp,  # noqa
-            message: str,
-    ) -> None:
-        logger.debug(f"Received message from StreamDeck. message={message}.")
-        for client in self.debug_clients:
-            client.send(message)
-            logger.debug(f"Message sent to StreamDeckPlugin {client}. message={message}.")
