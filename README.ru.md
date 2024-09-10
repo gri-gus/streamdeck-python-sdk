@@ -67,6 +67,7 @@ pip install streamdeck_sdk
 * Реализован полный протокол взаимодействия с приложением Stream Deck.
 * Быстрый старт проекта через консольную команду `streamdeck_sdk startproject`.
 * Сборка проекта через консольную команду `streamdeck_sdk build`.
+* Генератор Property Inspector. Пишите код на Python и получите html и js для PI.
 
 ## Быстрый старт
 
@@ -204,6 +205,363 @@ $PI.onSendToPropertyInspector("com.ggusev.keyboard.write", jsn => {
 ```
 
 Вместо `"com.ggusev.keyboard.write"` вам нужно подставить название вашего `action`.
+
+## Генератор Property Inspector
+
+С помощью этого инструмента вы можете быстро писать свой Property Inspector на Python.
+Код на html и js будет сгенерирован.
+
+В шаблоне приложения из раздела `Быстрый старт` есть
+файл `com.bestdeveloper.mytestplugin.sdPlugin/property_inspector/myaction_pi.py`,
+в котором приведен пример генерации Property Inspector в
+файл `com.bestdeveloper.mytestplugin.sdPlugin/property_inspector/myaction_pi.html`.
+
+Вот элементы, доступные для генерации на Python:
+
+```python
+from pathlib import Path
+
+from streamdeck_sdk.property_inspector import *
+
+OUTPUT_DIR = Path(__file__).parent
+TEMPLATE = Path(__file__).parent / "pi_template.html"
+
+
+class LoremFlickrStatus(BasePIElement):
+    def get_html_element(self) -> str:
+        res = """
+    <div class="sdpi-item" style="max-height: 60px">
+        <div class="sdpi-item-label">Website status</div>
+        <div class="sdpi-item-value"
+             style="background: #3D3D3D; height:26px; max-width: 56px; margin: 0 0 0 5px; padding: 0">
+            <img src="https://img.shields.io/website?down_color=%233d3d3d&down_message=offline&label=&style=flat-square&up_color=%233d3d3d&up_message=online&url=https%3A%2F%2Floremflickr.com%2F"
+                 alt="" style="height: 26px; max-width: 56px; margin: 0">
+        </div>
+    </div>
+        """
+        return res
+
+
+def main():
+    pi = PropertyInspector(
+        action_uuid="com.ggusev.example.exampleaction",
+        elements=[
+            Heading(label="TEXT"),
+            Textfield(
+                label="Name",
+                uid="name",
+                required=True,
+                pattern=".{2,}",
+                placeholder="Input your name",
+            ),
+            Textfield(
+                label="Text with default",
+                uid="text_with_default",
+                placeholder="Input default",
+                default_value="default"
+            ),
+            Textfield(
+                label="IP-Address",
+                uid="my_ip_address",
+                required=True,
+                pattern=r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
+                placeholder="e.g. 192.168.61.1",
+            ),
+            Textarea(
+                label="Textarea",
+                uid="textarea",
+                placeholder="Input",
+                max_length=100,
+                info_text="100 max"
+            ),
+            Textarea(label="Textarea", uid="textarea_1", placeholder="Input", ),
+            Password(
+                label="Password",
+                uid="password_input",
+                required=True,
+                pattern=".{2,}",
+                placeholder="Input password",
+                default_value="kitten",
+            ),
+            Heading(label="CHECKBOX & RADIO"),
+            Radio(
+                label="Union type",
+                uid="union_type",
+                items=[
+                    RadioItem(
+                        value="or",
+                        label="or",
+                        checked=False,
+                    ),
+                    RadioItem(
+                        value="and",
+                        label="and",
+                        checked=True,
+                    )
+                ]
+            ),
+            Checkbox(
+                label="Grayscale",
+                items=[
+                    CheckboxItem(
+                        uid="grayscale_flag",
+                        label="on",
+                        checked=False,
+                    ),
+                ],
+            ),
+            Heading(label="FILE"),
+            File(
+                label="Select file",
+                uid="my_file",
+                accept=[".jpg", ".jpeg", ".png"],
+            ),
+            Heading(label="DATE & TIME"),
+            DateTimeLocal(
+                label="Select datetime",
+                uid="my_datetime",
+                default_value="2024-09-13T19:39",
+            ),
+            Date(
+                label="Select date",
+                uid="my_date",
+                default_value="2019-01-15",
+            ),
+            Date(
+                label="Select date",
+                uid="my_date_1",
+            ),
+            Month(
+                label="Select month",
+                uid="my_month",
+                default_value="2024-07",
+            ),
+            Week(
+                label="Select week",
+                uid="my_week",
+                default_value="2024-W38",
+            ),
+            Time(
+                label="Select time",
+                uid="my_time",
+                default_value="19:39",
+            ),
+            Heading(label="GROUP"),
+            Group(
+                label="My group",
+                items=[
+                    Radio(
+                        label="Union type",
+                        uid="my_group_union_type",
+                        items=[
+                            RadioItem(
+                                value="or",
+                                label="or",
+                                checked=True,
+                            ),
+                            RadioItem(
+                                value="and",
+                                label="and",
+                                checked=False,
+                            )
+                        ]
+                    ),
+                    Date(
+                        label="Select date",
+                        uid="my_group_my_date",
+                        default_value="2019-01-15",
+                    ),
+                ]
+            ),
+            Heading(label="LINE"),
+            Line(),
+            Heading(label="COLOR"),
+            Color(
+                label="Color",
+                uid="my_color",
+                default_value="#240bda",
+            ),
+            Heading(label="PROGRESS & METER"),
+            Meter(
+                label="Meter",
+                uid="my_meter_2",
+                default_value=8,
+                max_value=100,
+            ),
+            Meter(
+                label="Meter",
+                uid="my_meter_1",
+                default_value=0.5,
+                left_label="0",
+                right_label="100",
+            ),
+            Progress(
+                label="Progress",
+                uid="my_progress_1",
+                default_value=0.5,
+            ),
+            Progress(
+                label="Progress",
+                uid="my_progress_2",
+                left_label="Min",
+                right_label="Max",
+                default_value=0.5,
+            ),
+            Heading(label="RANGE"),
+            Range(
+                label="Range",
+                uid="my_range_2",
+                min_value=0,
+                max_value=50,
+                default_value=20,
+            ),
+            Range(
+                label="Range (+ll + rl)",
+                uid="my_range_1",
+                left_label="0",
+                right_label="50",
+                min_value=0,
+                max_value=50,
+                default_value=20,
+            ),
+            Range(
+                label="Range(+stp)",
+                uid="my_range_3",
+                min_value=0,
+                max_value=50,
+                default_value=25,
+                step=25,
+            ),
+            Range(
+                label="Range(+dl +stp)",
+                uid="my_range_4",
+                min_value=0,
+                max_value=50,
+                default_value=25,
+                datalist=["", "", "", ],
+                step=25,
+            ),
+            Range(
+                label="Range(+dl +lbl)",
+                uid="my_range_5",
+                min_value=0,
+                max_value=100,
+                default_value=25,
+                datalist=["0", "50", "100", ],
+            ),
+            Heading(label="DETAILS"),
+            Details(
+                uid="my_full_width_details",
+                full_width=True,
+                heading="Full width details",
+                text="""
+                default open
+                """,
+                default_open=True,
+            ),
+            Details(
+                uid="my_details_with_label",
+                label="Details",
+                heading="Info",
+                text="My test info\nMy test info"
+            ),
+            Heading(label="MESSAGE"),
+            Message(
+                uid="my_message",
+                heading="Example message",
+                message_type=MessageTypes.INFO,
+                text="Example message text",
+            ),
+            Message(
+                uid="last_error",
+                heading="Last error",
+                message_type=MessageTypes.CAUTION,
+                text="",
+            ),
+            Heading(label="SELECT"),
+            Select(
+                uid="my_select_1",
+                label="Select",
+                values=["1", "2", "3", "4"],
+                default_value="2",
+            ),
+            Select(
+                uid="my_select_2",
+                label="Select 2",
+                values=[],
+            ),
+            Heading(label="CUSTOM"),
+            LoremFlickrStatus(),
+        ]
+    )
+    pi.build(output_dir=OUTPUT_DIR, template=TEMPLATE)
+
+
+if __name__ == '__main__':
+    main()
+
+```
+
+> Вы можете писать свои кастомные элементы, к примеру как `LoremFlickrStatus`, а также редактировать `pi_template.html`
+> на ваше усмотрение.
+
+> `uid` - это будущий ключ в словаре `obj.payload.settings`.
+
+> К `uid` применяются те же самые правила, что и к именованию переменных в Python.
+
+> `uid` должен быть уникален в рамках одного файла для генерации Property Inspector.
+
+> Все элементы, которые содержат `uid`, доступны для управления.
+
+### Пример создания Property Inspector и управления полем
+
+К примеру, вы сделали такой Property Inspector и сгенерировали его:
+
+```python
+from pathlib import Path
+
+from streamdeck_sdk.property_inspector import *
+
+OUTPUT_DIR = Path(__file__).parent
+TEMPLATE = Path(__file__).parent / "pi_template.html"
+
+
+def main():
+    pi = PropertyInspector(
+        action_uuid="com.bestdeveloper.mytestplugin.myaction",
+        elements=[
+            Textfield(
+                uid="my_input",
+                label="My input",
+                placeholder="Input text",
+            ),
+        ]
+    )
+    pi.build(output_dir=OUTPUT_DIR, template=TEMPLATE)
+
+
+if __name__ == '__main__':
+    # Run to generate Property Inspector
+    main()
+```
+
+Тогда в `Action` плагина вы можете использовать примерно такой код для того, чтобы получить значение из поля `My input`,
+а затем изменить значение, если это необходимо:
+
+```python
+ def on_key_down(self, obj: events_received_objs.KeyDown):
+    my_input_value = obj.payload.settings["my_input"]
+    print(my_input_value)
+
+    stngs = obj.payload.settings.copy()
+    stngs["my_input"] = "12345"
+    self.set_settings(
+        context=obj.context,
+        payload=stngs,
+    )
+```
+
+После выполнения `self.set_settings` значение поля `My input` изменится на `12345`.
 
 ## Примеры
 

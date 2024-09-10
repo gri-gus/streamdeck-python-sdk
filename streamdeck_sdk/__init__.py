@@ -1,4 +1,4 @@
-from . import mixins
+from . import mixins, property_inspector
 from .logger import logger, log_errors
 from .sd_objs import events_received_objs, events_sent_objs, registration_objs
 from .sdk import StreamDeck, Action

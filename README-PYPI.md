@@ -48,6 +48,7 @@ Library for creating Stream Deck plugins in Python.
 * A complete protocol for interaction with the Stream Deck application has been implemented.
 * Quick start of a project via the console command `streamdeck_sdk startproject`.
 * Build the project using the `streamdeck_sdk build` console command.
+* Property Inspector Generator. Write code in Python and get html and js for PI.
 
 ## Examples
 
