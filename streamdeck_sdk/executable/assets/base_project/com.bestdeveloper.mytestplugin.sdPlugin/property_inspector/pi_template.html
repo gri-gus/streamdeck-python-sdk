@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <title>YOUR_ACTION_UUID Property Inspector</title>
+    <link rel="stylesheet" href="streamdeck-javascript-sdk/css/sdpi.css"/>
+</head>
+
+<body>
+<div class="sdpi-wrapper">
+
+    <!--    YOUR HTML CODE   -->
+
+</div>
+
+<!-- Stream Deck Libs -->
+<script src="streamdeck-javascript-sdk/js/constants.js"></script>
+<script src="streamdeck-javascript-sdk/js/prototypes.js"></script>
+<script src="streamdeck-javascript-sdk/js/timers.js"></script>
+<script src="streamdeck-javascript-sdk/js/utils.js"></script>
+<script src="streamdeck-javascript-sdk/js/events.js"></script>
+<script src="streamdeck-javascript-sdk/js/api.js"></script>
+<script src="streamdeck-javascript-sdk/js/property-inspector.js"></script>
+<script src="streamdeck-javascript-sdk/js/dynamic-styles.js"></script>
+<script>
+    console.log('Property Inspector loaded', $PI);
+
+    <!--    YOUR JS CODE CONSTS   -->
+
+    let settings
+
+    $PI.onConnected(jsn => {
+        console.log('Property Inspector connected', jsn);
+        console.log(jsn.actionInfo.payload.settings);
+        settings = jsn.actionInfo.payload.settings;
+
+        <!--    YOUR JS CODE ON_CONNECT   -->
+
+        $PI.setSettings(settings);
+    });
+
+    $PI.onDidReceiveSettings("YOUR_ACTION_UUID", jsn => {
+        settings = jsn.payload.settings
+
+        // YOUR_ON_DID_RECEIVE_SETTINGS_JS
+    });
+
+    <!--    YOUR JS CODE   -->
+
+    function get_select_values_and_selected(element) {
+        let values = [];
+        for (let i = 0; i < element.options.length; i++) {
+            let option = element.options[i];
+            if (option.value === "null") {
+                continue;
+            }
+            values.push(option.value);
+        }
+        let selected
+        if (element.value === "null") {
+            selected = null
+        } else {
+            selected = element.value
+        }
+        return {
+            values: values,
+            selected: selected
+        };
+    }
+
+    function update_select_options(element, values, selected_value) {
+        element.innerHTML = '';
+
+        if (selected_value === null) {
+            selected_value = "null";
+        }
+
+        const nullOption = document.createElement('option');
+        nullOption.value = "null";
+        nullOption.text = "";
+        element.appendChild(nullOption);
+
+        values.forEach(value => {
+            if (value === null) {
+                return;
+            }
+            const option = document.createElement('option');
+            option.value = value;
+            option.text = value;
+            element.appendChild(option);
+        });
+
+        if (values.includes(selected_value)) {
+            element.value = selected_value;
+            return true
+        } else {
+            element.value = "null";
+            return false
+        }
+    }
+
+</script>
+</body>
+
+</html>

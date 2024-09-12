@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 PACKAGE_DIR = "."
 REQUIREMENTS_FILE = "./requirements.txt"
 README = "README-PYPI.md"
@@ -48,7 +48,9 @@ setuptools.setup(
         "elgato stream deck",
         "streamdeck-python-sdk",
         "streamdeck_python_sdk",
-        "streamdeck python sdk"
+        "streamdeck python sdk",
+        "streamdeck property inspector",
+        "streamdeck pi",
     ],
     install_requires=requirements,
     entry_points={

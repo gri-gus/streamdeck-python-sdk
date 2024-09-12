@@ -7,9 +7,9 @@ from websockets.sync.server import (
     serve,
 )
 
-from .mixins import SendMixin
-from .simple_ws.client import WebSocketClientApp
-from .utils.in_separate_thread import in_separate_thread
+from streamdeck_sdk.mixins import SendMixin
+from streamdeck_sdk.simple_ws.client import WebSocketClientApp
+from streamdeck_sdk.utils.in_separate_thread import in_separate_thread
 
 logger = logging.getLogger(__name__)
 

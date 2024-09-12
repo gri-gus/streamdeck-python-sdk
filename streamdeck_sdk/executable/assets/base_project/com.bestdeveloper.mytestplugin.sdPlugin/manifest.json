@@ -9,6 +9,7 @@
           "Image": "assets/myaction/key_icon"
         }
       ],
+      "PropertyInspectorPath": "property_inspector/myaction_pi.html",
       "SupportedInMultiActions": true,
       "Controllers": [
         "Keypad"
@@ -22,7 +23,7 @@
   "Description": "Open streamdeck_sdk github page.",
   "Icon": "assets/plugin_icon",
   "Name": "MyTestPlugin",
-  "Version": "0.0.1",
+  "Version": "0.0.2",
   "SDKVersion": 2,
   "OS": [
     {
