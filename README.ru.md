@@ -567,3 +567,6 @@ if __name__ == '__main__':
 
 [LoremFlickr](https://github.com/gri-gus/loremflickr-streamdeck-plugin) - Плагин для установки изображений на кнопку
 с сайта LoremFlickr. Поддерживает MacOS и Windows.
+
+[Proxy Manager](https://github.com/gri-gus/proxymanager-streamdeck-plugin) - Плагин для включения и
+отключения прокси на MacOS. Периодически опрашивает состояние proxy через отдельный поток.

@@ -567,3 +567,6 @@ After executing `self.set_settings` the value of the `My input` field will chang
 
 [LoremFlickr](https://github.com/gri-gus/loremflickr-streamdeck-plugin) - Plugin for installing images on a button from
 the LoremFlickr site. Supports MacOS and Windows.
+
+[Proxy Manager](https://github.com/gri-gus/proxymanager-streamdeck-plugin) - Plugin for enabling and disabling
+proxies on MacOS. Periodically polls the proxy status through a separate thread.
