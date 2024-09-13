@@ -570,3 +570,6 @@ if __name__ == '__main__':
 
 [Proxy Manager](https://github.com/gri-gus/proxymanager-streamdeck-plugin) - Плагин для включения и
 отключения прокси на MacOS. Периодически опрашивает состояние proxy через отдельный поток.
+
+[One-time password](https://github.com/gri-gus/otp-streamdeck-plugin) - Плагин для генерации одноразовых паролей,
+как в Google Authenticator. Имеет несколько Actions. Поддерживает MacOS и Windows.

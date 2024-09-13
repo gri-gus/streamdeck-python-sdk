@@ -570,3 +570,6 @@ the LoremFlickr site. Supports MacOS and Windows.
 
 [Proxy Manager](https://github.com/gri-gus/proxymanager-streamdeck-plugin) - Plugin for enabling and disabling
 proxies on MacOS. Periodically polls the proxy status through a separate thread.
+
+[One-time password](https://github.com/gri-gus/otp-streamdeck-plugin) - Plugin for generating one-time passwords,
+like in Google Authenticator. Has several Actions. Supports MacOS and Windows.
