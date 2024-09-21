@@ -35,6 +35,7 @@ class EventRoutingMixin(EventsSendMixin):
     ) -> None:
         logger.debug(f"{close_status_code=}; {close_msg=}")
         logger.info(f"WS CLOSED")
+        exit(0)
 
     @log_errors
     def ws_on_error(
