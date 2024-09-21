@@ -45,8 +45,11 @@ def log_errors(func):
     def wrapper(*args, **kwargs):
         try:
             result = func(*args, **kwargs)
+        except SystemExit as err:
+            _log_errors_decorator_logger.exception(str(err))
+            raise err
         except BaseException as err:
-            _log_errors_decorator_logger.error(str(err), exc_info=True)
+            _log_errors_decorator_logger.exception(str(err))
             return
         return result
 

@@ -36,6 +36,22 @@ Library for creating Stream Deck plugins in Python.
 
 **Supported Python versions:** 3.8 or later
 
+## Installation
+
+> ⚠️ To work correctly on Windows, you need to enable `LongPaths` support in
+> the system: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
+> Without this setting, installation problems may occur!
+
+```shell
+pip install streamdeck-sdk
+```
+
+or
+
+```shell
+pip install streamdeck_sdk
+```
+
 ## Features
 
 * Ease of use. You can quickly create your own plugin without having to understand how websockets and
@@ -50,10 +66,30 @@ Library for creating Stream Deck plugins in Python.
 * Build the project using the `streamdeck_sdk build` console command.
 * Property Inspector Generator. Write code in Python and get html and js for PI.
 
+## ⚠️ Limitations
+
+1. During installation and update of the plugin, the Internet must be available.
+
+### Windows
+
+1. Plugin requirements should take no longer than 30 seconds to install. This is a feature of Stream Deck on Windows,
+   since the program restarts the plugin if a websocket connection has not been established within 30 seconds.
+   Therefore, you need a good Internet connection when installing and updating the plugin.
+2. You need to enable `LongPaths` support in the system
+   registry: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
+
+   Without this setting, the created plugins will not work!
+
 ## Examples
 
 [LoremFlickr](https://github.com/gri-gus/loremflickr-streamdeck-plugin) - Plugin for installing images on a button from
 the LoremFlickr site. Supports MacOS and Windows.
+
+[Proxy Manager](https://github.com/gri-gus/proxymanager-streamdeck-plugin) - Plugin for enabling and disabling
+proxies on MacOS. Periodically polls the proxy status through a separate thread.
+
+[One-time password](https://github.com/gri-gus/otp-streamdeck-plugin) - Plugin for generating one-time passwords,
+like in Google Authenticator. Has several Actions. Supports MacOS and Windows.
 
 ---
 

@@ -45,6 +45,10 @@ Library for creating Stream Deck plugins in Python.
 
 ## Installation
 
+> ⚠️ To work correctly on Windows, you need to enable `LongPaths` support in
+> the system: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
+> Without this setting, installation problems may occur!
+
 ```shell
 pip install streamdeck-sdk
 ```
@@ -68,6 +72,20 @@ pip install streamdeck_sdk
 * Quick start of a project via the console command `streamdeck_sdk startproject`.
 * Build the project using the `streamdeck_sdk build` console command.
 * Property Inspector Generator. Write code in Python and get html and js for PI.
+
+## ⚠️ Limitations
+
+1. During installation and update of the plugin, the Internet must be available.
+
+### Windows
+
+1. Plugin requirements should take no longer than 30 seconds to install. This is a feature of Stream Deck on Windows,
+   since the program restarts the plugin if a websocket connection has not been established within 30 seconds.
+   Therefore, you need a good Internet connection when installing and updating the plugin.
+2. You need to enable `LongPaths` support in the system
+   registry: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
+
+   Without this setting, the created plugins will not work!
 
 ## Quick Start
 
