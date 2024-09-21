@@ -23,7 +23,7 @@
   "Description": "Open streamdeck_sdk github page.",
   "Icon": "assets/plugin_icon",
   "Name": "MyTestPlugin",
-  "Version": "0.0.3",
+  "Version": "0.0.4",
   "SDKVersion": 2,
   "OS": [
     {

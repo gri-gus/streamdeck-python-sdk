@@ -111,6 +111,12 @@ After completing this step, the folder `com.bestdeveloper.mytestplugin.sdPlugin`
 streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin
 ```
 
+⚠️ If you are using Windows and receive an error, then use the command:
+
+```shell
+streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin -F
+```
+
 6. Install the `releases/{date}/com.bestdeveloper.mytestplugin.streamDeckPlugin` plugin into the Stream Deck
    application. Usually installed via double click.
 
