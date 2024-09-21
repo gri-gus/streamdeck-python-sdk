@@ -111,6 +111,12 @@ streamdeck_sdk startproject
 streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin
 ```
 
+⚠️ Если вы используете Windows и получили ошибку, то используете команду:
+
+```shell
+streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin -F
+```
+
 6. Установите плагин `releases/{date}/com.bestdeveloper.mytestplugin.streamDeckPlugin` в приложение Stream Deck.
    Обычно устанавливается через двойной клик.
 

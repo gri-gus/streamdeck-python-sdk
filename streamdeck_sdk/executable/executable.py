@@ -21,6 +21,7 @@ def main():
     parser = argparse.ArgumentParser(description="StreamDeckSDK")
     parser.add_argument("command")
     parser.add_argument("-i", default=None, required=False, type=str, help="Input file", )
+    parser.add_argument('-F', action='store_true', help="Force build", )
     args = parser.parse_args()
     logger.info(args)
     command = args.command
@@ -29,7 +30,7 @@ def main():
     elif command == "build":
         if args.i is None:
             raise ValueError("Invalid value for -i param.")
-        input_file = Path(args.i).resolve()
+        input_file = str(Path(args.i).resolve())
 
         now = datetime.now()
         dt = now.strftime("%Y_%m_%d_%H_%M_%S")
@@ -39,6 +40,11 @@ def main():
 
         [p.unlink() for p in BASE_DIR.rglob('*.py[co]')]
         [p.rmdir() for p in BASE_DIR.rglob('__pycache__')]
+
+        force = args.F
+        if force:
+            force_build(i=input_file, o=release_dir)
+            return
 
         os_name = platform.system()
         logger.info(os_name)
@@ -52,3 +58,21 @@ def main():
         subprocess.run(
             [distribution_tool, "-b", "-i", input_file, "-o", release_dir],
         )
+
+
+def force_build(i: str, o: str) -> None:
+    i = Path(i)
+    o = Path(o)
+    output_zip_base_name = o / i.name
+    shutil.make_archive(
+        base_name=str(output_zip_base_name.resolve()),
+        format="zip",
+        root_dir=str(i.parent.resolve()),
+        base_dir=i.name,
+    )
+    output_zip_file_path = o / f"{i.name}.zip"
+    output_plugin_file_path = o / i.name.replace(".sdPlugin", ".streamDeckPlugin")
+    os.rename(
+        str(output_zip_file_path.resolve()),
+        str(output_plugin_file_path.resolve())
+    )
