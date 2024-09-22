@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "streamdeck_sdk"
-version = "1.2.0.dev7"
+version = "1.2.0.dev8"
 authors = [
     { name = "Grigoriy Gusev", email = "thegrigus@gmail.com" },
 ]

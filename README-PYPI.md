@@ -38,6 +38,10 @@ Library for creating Stream Deck plugins in Python.
 
 ## Installation
 
+> ⚠️ For correct operation on Windows, it is recommended to enable `LongPaths` support in
+> the system: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
+> Without this setting, problems with installation and use may occur!
+
 ```shell
 pip install streamdeck-sdk[dev]
 ```

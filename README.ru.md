@@ -45,6 +45,10 @@
 
 ## Установка
 
+> ⚠️ Для корректной работы на Windows рекомендуется включить поддержку `LongPaths` в
+> системе: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
+> Без этой настройки возможны проблемы с установкой и использованием!
+
 ```shell
 pip install streamdeck-sdk[dev]
 ```
