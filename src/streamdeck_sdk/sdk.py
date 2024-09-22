@@ -16,8 +16,8 @@ from .logger import (
     rename_plugin_logger,
 )
 from .mixins import Base
-from .mixins.event_routing_mixin import EventRoutingMixin
 from .mixins.debug_server_mixin import DebugServerMixin
+from .mixins.event_routing_mixin import EventRoutingMixin
 from .sd_objs import registration_objs
 from .simple_ws.client import WebSocketClientApp
 

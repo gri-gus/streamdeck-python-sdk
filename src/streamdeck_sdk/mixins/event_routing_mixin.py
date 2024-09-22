@@ -4,12 +4,12 @@ from typing import Callable
 
 import pydantic
 
-from src.streamdeck_sdk import event_routings
-from src.streamdeck_sdk.logger import (
+from .. import event_routings
+from ..logger import (
     log_errors,
 )
-from src.streamdeck_sdk.mixins import EventsSendMixin
-from src.streamdeck_sdk.simple_ws.client import WebSocketClientApp
+from ..mixins.send_event_mixins import EventsSendMixin
+from ..simple_ws.client import WebSocketClientApp
 
 logger = logging.getLogger(__name__)
 
