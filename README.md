@@ -224,6 +224,8 @@ Instead of `"com.ggusev.keyboard.write"` you need to substitute the name of your
 
 ## Property Inspector Generator
 
+[streamdeck-python-sdk-pi](https://github.com/gri-gus/streamdeck-python-sdk-pi)
+
 With this tool you can quickly write your Property Inspector in Python.
 HTML and JS code will be generated.
 

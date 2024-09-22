@@ -224,6 +224,8 @@ $PI.onSendToPropertyInspector("com.ggusev.keyboard.write", jsn => {
 
 ## Генератор Property Inspector
 
+[streamdeck-python-sdk-pi](https://github.com/gri-gus/streamdeck-python-sdk-pi)
+
 С помощью этого инструмента вы можете быстро писать свой Property Inspector на Python.
 Код на html и js будет сгенерирован.
 
