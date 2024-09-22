@@ -1,1 +1,0 @@
-streamdeck-sdk>=1.1.2
