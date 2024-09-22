@@ -84,7 +84,7 @@ pip install "streamdeck-sdk[dev]"
 3. Go to the project folder, activate `venv` and install the `streamdeck-sdk` library:
 
 ```shell
-pip install streamdeck-sdk[dev]
+pip install "streamdeck-sdk[dev]"
 ```
 
 4. Run the command to start the project:
