@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools >= 60.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "streamdeck_sdk"
+version = "1.2.0.dev8"
+authors = [
+    { name = "Grigoriy Gusev", email = "thegrigus@gmail.com" },
+]
+description = "Library for creating Stream Deck plugins in Python."
+readme = "README-PYPI.md"
+dependencies = [
+    "annotated-types==0.7.0",
+    "decohints==1.0.9",
+    "pydantic==2.8.2",
+    "pydantic_core==2.20.1",
+    "typing_extensions==4.12.2",
+    "websockets==13.0.1",
+]
+requires-python = ">=3.8"
+keywords = [
+    "property inspector",
+    "property inspector generator",
+    "streamdeck property inspector generator",
+    "streamdeck property inspector",
+    "streamdeck pi",
+    "python",
+    "sdk",
+    "streamdeck",
+    "streamdeck-sdk",
+    "streamdeck_sdk",
+    "stream deck sdk",
+    "stream deck",
+    "elgato",
+    "elgato sdk",
+    "elgato stream deck",
+    "streamdeck-python-sdk",
+    "streamdeck_python_sdk",
+    "streamdeck python sdk",
+]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dev = [
+    "streamdeck-sdk-cli>=0.0.1.dev6,<0.0.2",
+    "streamdeck-sdk-pi>=0.0.1.dev1,<0.0.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/gri-gus/streamdeck-python-sdk"
+Source = "https://github.com/gri-gus/streamdeck-python-sdk"
+
+[tool.setuptools.packages.find]
+where = ["src"]

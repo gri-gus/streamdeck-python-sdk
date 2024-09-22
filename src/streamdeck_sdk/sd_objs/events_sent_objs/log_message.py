@@ -9,7 +9,7 @@ class LogMessagePayload(BaseModel):
 
 
 class LogMessage(BaseModel):
-    """
+    r"""
     The plugin and Property Inspector can use the logMessage event to write a debug message to the logs file.
     * Logs are saved to disk per plugin in the folder ~/Library/Logs/ElgatoStreamDeck/ on macOS
     and %appdata%\Elgato\StreamDeck\logs\ on Windows. Note that the log files are rotated each time
