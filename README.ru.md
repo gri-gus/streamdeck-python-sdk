@@ -50,7 +50,7 @@
 > Без этой настройки возможны проблемы с установкой и использованием!
 
 ```shell
-pip install streamdeck-sdk[dev]
+pip install "streamdeck-sdk[dev]"
 ```
 
 ## Возможности
