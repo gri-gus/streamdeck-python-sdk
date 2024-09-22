@@ -45,18 +45,8 @@
 
 ## Установка
 
-> ⚠️ Для корректной работы на Windows нужно включить поддержку `LongPaths` в
-> системе: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
-> Без этой настройки возможны проблемы с установкой!
-
 ```shell
-pip install streamdeck-sdk
-```
-
-or
-
-```shell
-pip install streamdeck_sdk
+pip install streamdeck-sdk[dev]
 ```
 
 ## Возможности
@@ -82,10 +72,6 @@ pip install streamdeck_sdk
 1. Зависимости плагина должны устанавливаться не дольше 30 секунд. Это особенность Stream Deck на Windows, так как
    программа перезапускает плагин, если в течение 30 секунд не было установлено websocket соединение. Поэтому нужен
    хороший интернет при установке и обновлении плагина.
-2. Нужно включить поддержку `LongPaths` в реестре
-   системы: [manual](https://www.backupery.com/how-to-enable-ntfs-long-paths-in-windows/).
-
-   Без этой настройки созданные плагины не будут работать!
 
 ## Быстрый старт
 
@@ -94,7 +80,7 @@ pip install streamdeck_sdk
 3. Перейдите в папку проекта, активируйте `venv` и установите библиотеку `streamdeck-sdk`:
 
 ```shell
-pip install streamdeck-sdk
+pip install streamdeck-sdk[dev]
 ```
 
 4. Выполните команду для старта проекта:
@@ -106,6 +92,8 @@ streamdeck_sdk startproject
 После выполнения этого пункта появится папка `com.bestdeveloper.mytestplugin.sdPlugin` с тестовым проектом.
 
 5. Соберите плагин с помощью команды:
+
+> ⚠️ В файле `requirements.txt` не должно быть библиотек `streamdeck-sdk-*`. Если они есть - удалите их.
 
 ```shell
 streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin
@@ -245,7 +233,7 @@ $PI.onSendToPropertyInspector("com.ggusev.keyboard.write", jsn => {
 ```python
 from pathlib import Path
 
-from streamdeck_sdk.property_inspector import *
+from streamdeck_sdk_pi import *
 
 OUTPUT_DIR = Path(__file__).parent
 TEMPLATE = Path(__file__).parent / "pi_template.html"
@@ -544,7 +532,7 @@ if __name__ == '__main__':
 ```python
 from pathlib import Path
 
-from streamdeck_sdk.property_inspector import *
+from streamdeck_sdk_pi import *
 
 OUTPUT_DIR = Path(__file__).parent
 TEMPLATE = Path(__file__).parent / "pi_template.html"
