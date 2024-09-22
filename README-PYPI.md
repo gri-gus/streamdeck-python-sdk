@@ -43,7 +43,7 @@ Library for creating Stream Deck plugins in Python.
 > Without this setting, problems with installation and use may occur!
 
 ```shell
-pip install streamdeck-sdk[dev]
+pip install "streamdeck-sdk[dev]"
 ```
 
 ## Features

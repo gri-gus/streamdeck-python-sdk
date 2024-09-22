@@ -50,7 +50,7 @@
 > Без этой настройки возможны проблемы с установкой и использованием!
 
 ```shell
-pip install streamdeck-sdk[dev]
+pip install "streamdeck-sdk[dev]"
 ```
 
 ## Возможности
@@ -223,6 +223,8 @@ $PI.onSendToPropertyInspector("com.ggusev.keyboard.write", jsn => {
 Вместо `"com.ggusev.keyboard.write"` вам нужно подставить название вашего `action`.
 
 ## Генератор Property Inspector
+
+[streamdeck-python-sdk-pi](https://github.com/gri-gus/streamdeck-python-sdk-pi)
 
 С помощью этого инструмента вы можете быстро писать свой Property Inspector на Python.
 Код на html и js будет сгенерирован.
