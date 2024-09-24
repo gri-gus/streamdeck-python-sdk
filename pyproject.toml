@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "streamdeck_sdk"
-version = "1.2.0"
+version = "1.2.1"
 authors = [
     { name = "Grigoriy Gusev", email = "thegrigus@gmail.com" },
 ]
@@ -47,7 +47,7 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "streamdeck-sdk-cli>=0.0.1,<0.1.0",
+    "streamdeck-sdk-cli>=0.0.2,<0.1.0",
     "streamdeck-sdk-pi>=0.0.1,<0.1.0",
 ]
 

@@ -53,6 +53,14 @@ Library for creating Stream Deck plugins in Python.
 pip install "streamdeck-sdk[dev]"
 ```
 
+During this installation, additional libraries needed for development are installed:
+
+* [streamdeck-sdk-pi](https://pypi.org/project/streamdeck-sdk-pi) - Property Inspector generator in Python
+
+* [streamdeck-sdk-cli](https://pypi.org/project/streamdeck-sdk-cli) - useful command line utilities
+
+> ⚠️ These libraries should not be present in the plugin's `requirements.txt`.
+
 ## Features
 
 * Ease of use. You can quickly create your own plugin without having to understand how websockets and
