@@ -53,6 +53,14 @@
 pip install "streamdeck-sdk[dev]"
 ```
 
+Во время такой установки дополнительно устанавливаются библиотеки, нужные для разработки:
+
+* [streamdeck-sdk-pi](https://pypi.org/project/streamdeck-sdk-pi) - генератор Property Inspector на Python
+
+* [streamdeck-sdk-cli](https://pypi.org/project/streamdeck-sdk-cli) - полезные утилиты командной строки
+
+> ⚠️ Эти библиотеки не должны присутствовать в `requirements.txt` плагина.
+
 ## Возможности
 
 * Простота использования. Вы можете быстро создать свой собственный плагин, не разбираясь в том,
