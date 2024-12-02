@@ -174,11 +174,7 @@ Let's look at an example of how the `self.send_to_property_inspector` method wor
 
 Let's look at the documentation from Elgato:
 
-Here is the object sent from the plugin when
-calling `self.send_to_property_inspector`: [click](https://docs.elgato.com/sdk/plugins/events-sent#sendtopropertyinspector)
-
-Here is the resulting object in the Property inspector when
-calling `self.send_to_property_inspector`: [click](https://docs.elgato.com/sdk/plugins/events-received#sendtopropertyinspector)
+`self.send_to_property_inspector`: [click](https://docs.elgato.com/streamdeck/sdk/references/websocket/plugin/#sendtopropertyinspector)
 
 Here is the source code for the method `self.send_to_property_inspector` method:
 

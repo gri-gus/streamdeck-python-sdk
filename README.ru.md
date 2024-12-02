@@ -127,7 +127,8 @@ streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin -F
     1. Открывается страница GitHub.
     2. Появляется ✅ на кнопке.
 
-Далее отредактируйте проект в соответствии с официальной документацией [Stream Deck SDK](https://docs.elgato.com/sdk).
+Далее отредактируйте проект в соответствии с официальной
+документацией [Stream Deck SDK](https://docs.elgato.com/streamdeck/sdk/references/websocket/plugin).
 
 > ⚠️ Не забывайте редактировать файл `manifest.json` и название плагина.
 
@@ -174,11 +175,7 @@ self.open_url("https://github.com/gri-gus/streamdeck-python-sdk")
 
 Посмотрим документацию от Elgato:
 
-Вот объект, отправленный из плагина, когда вызывается
-`self.send_to_property_inspector`: [click](https://docs.elgato.com/sdk/plugins/events-sent#sendtopropertyinspector)
-
-Вот полученный объект в Property Inspector, когда вызывается
-`self.send_to_property_inspector`: [click](https://docs.elgato.com/sdk/plugins/events-received#sendtopropertyinspector)
+`self.send_to_property_inspector`: [click](https://docs.elgato.com/streamdeck/sdk/references/websocket/plugin/#sendtopropertyinspector)
 
 Вот исходный код метода для метода `self.send_to_property_inspector`:
 
