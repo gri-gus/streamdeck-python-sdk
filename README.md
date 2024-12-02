@@ -128,7 +128,8 @@ streamdeck_sdk build -i com.bestdeveloper.mytestplugin.sdPlugin -F
     1. The GitHub page opens.
     2. ✅ appears on the button.
 
-Next, edit the project in accordance with the official documentation [Stream Deck SDK](https://docs.elgato.com/sdk).
+Next, edit the project in accordance with the official
+documentation [Stream Deck SDK](https://docs.elgato.com/streamdeck/sdk/references/websocket/plugin).
 > ⚠️ Don't forget to edit the `manifest.json` file and the plugin name.
 
 ## Debug mode
