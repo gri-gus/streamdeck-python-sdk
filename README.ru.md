@@ -14,7 +14,7 @@
     <a href="https://opensource.org/licenses/Apache-2.0" target="_blank">
         <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="Apache">
     </a>
-    <a href="https://docs.elgato.com/sdk" target="_blank">
+    <a href="https://docs.elgato.com/streamdeck/sdk/references/websocket/plugin" target="_blank">
         <img src="https://badgen.net/badge/Elgato/doc/blue" alt="Elgato">
     </a>
 </p>
@@ -39,7 +39,7 @@
 * MacOS: 10.14 or later
 * Windows: 10 or later
 
-**Поддерживаемые версии Stream Deck:** 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.7
+**Поддерживаемые версии Stream Deck:** 6.0 - 6.8
 
 **Поддерживаемые версии Python:** 3.8 or later
 
